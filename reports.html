@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Total Attending students</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--  -->
+      </tbody>
+    </table>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let tbody = document.querySelector("tbody");
+    function getData() {
+      axios
+        .get("https://masai-event-l3ru.onrender.com/users")
+        .then((res) => {
+          showData(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+
+    function showData(data) {
+      tbody.innerHTML = "";
+      let tr = document.createElement("tr");
+      let td1 = document.createElement("td");
+      let td2 = document.createElement("td");
+      let td3 = document.createElement("td");
+      td1.innerText = data.length;
+      td2.innerText = "No Records";
+      td3.innerText = "No Records";
+
+      tr.append(td1, td2, td3);
+      tbody.append(tr);
+    }
+    getData();
+  </script>
+</html>

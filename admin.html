@@ -18,6 +18,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    let isAuth = JSON.parse(localStorage.getItem("isAuth"));
+    if (isAuth) {
+      window.location.href = "data.html";
+    }
+
     let login = document.querySelector(".login");
 
     login.addEventListener("click", function () {

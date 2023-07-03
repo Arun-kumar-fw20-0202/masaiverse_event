@@ -7,14 +7,6 @@
       "batch_name": "fw20",
       "profession": "full stack",
       "id": 1
-    },
-    {
-      "name": "katill",
-      "age": "21",
-      "batch_name": "fw20",
-      "profession": "katill",
-      "place": "new york",
-      "id": 2
     }
   ]
 }

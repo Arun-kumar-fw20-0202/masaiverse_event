@@ -4,38 +4,194 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .main {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .main .card {
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+      .pop {
+        display: flex;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+      }
+      .pop.active {
+        display: flex;
+      }
+      .pop > .inputBx {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        background-color: white;
+        padding: 20px;
+        /* width: 100%; */
+      }
+      .close {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        background-color: red;
+        color: white;
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
-    <div class="main">
-      <div class="card">
-        <p>name</p>
-        <p>Age</p>
-        <p>Place</p>
-        <p>batch_name</p>
-        <p>profession</p>
+    <div class="pop">
+      <div class="inputBx">
+        <div class="close">X</div>
+        <span>Name</span>
+        <input class="name" type="text" />
+        <span>Age</span>
+        <input class="age" type="text" />
+        <span>Place</span>
+        <input class="place" type="text" />
+        <span>Batch Name</span>
+        <input class="batch_name" type="text" />
+        <span>Profession</span>
+        <input class="profession" type="text" />
+        <button class="update">Update</button>
       </div>
+    </div>
+
+    <div class="main">
+      <!-- Data -->
     </div>
   </body>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    let main = document.querySelector(".main");
+
+    let pop = document.querySelector(".pop");
+
     let isAuth = JSON.parse(localStorage.getItem("isAuth"));
-    console.log(isAuth);
+    // console.log(isAuth);
     if (!isAuth) {
       window.location.href = "admin.html";
     }
+
     function showData(data) {
-      console.log(data);
+      main.innerHTML = "";
+      //   console.log(data);
+      data.map((ele) => {
+        let card = document.createElement("div");
+        card.setAttribute("class", "card");
+        // card.addClassList("card");
+
+        let p1 = document.createElement("p");
+        let p2 = document.createElement("p");
+        let p3 = document.createElement("p");
+        let p4 = document.createElement("p");
+        let p5 = document.createElement("p");
+        let button1 = document.createElement("button");
+        let button2 = document.createElement("button");
+        button1.innerText = "Edit";
+        button2.innerText = "Delete";
+
+        button2.addEventListener("click", function () {
+          handleDelete(ele.id);
+        });
+
+        button1.addEventListener("click", function () {
+          handleEdit(ele.id);
+        });
+
+        p1.innerText = `Name : ${ele.name}`;
+        p2.innerText = `Age : ${ele.age}`;
+        p3.innerText = `Place : ${ele.place}`;
+        p4.innerText = `Batch Name : ${ele.batch_name}`;
+        p5.innerText = `Professioin : ${ele.profession}`;
+        card.append(p1, p2, p3, p4, p5, button1, button2);
+        main.append(card);
+      });
     }
 
     function getData() {
       axios
-        .get(" http://localhost:8080/users")
+        .get("https://masai-event-l3ru.onrender.com/users")
         .then((res) => {
           showData(res.data);
         })
         .catch((err) => console.log(err));
     }
     getData();
+
+    function handleDelete(id) {
+      axios
+        .delete(`https://masai-event-l3ru.onrender.com/users/${id}`)
+        .then((res) => {
+          getData();
+          alert("item delete successfuly");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    function handleEdit(id) {
+      pop.classList.toggle("active");
+      var name = document.querySelector(".name");
+      var age = document.querySelector(".age");
+      var batch_name = document.querySelector(".batch_name");
+      var profession = document.querySelector(".profession");
+      var place = document.querySelector(".place");
+
+      axios
+        .get(`https://masai-event-l3ru.onrender.com/users/${id}`)
+        .then((res) => {
+          //   console.log(res.data.name);
+          name.value = res.data.name;
+          age.value = res.data.age;
+          place.value = res.data.place;
+          batch_name.value = res.data.batch_name;
+          profession.value = res.data.profession;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      let update = document.querySelector(".update");
+      update.addEventListener("click", function () {
+        let obj = {
+          name: name.value,
+          age: age.value,
+          batch_name: batch_name.value,
+          profession: profession.value,
+          place: place.value,
+        };
+        finalUpdate(id, obj);
+      });
+    }
+
+    document.querySelector(".close").addEventListener("click", function () {
+      pop.classList.toggle("active");
+    });
+
+    function finalUpdate(id, obj) {
+      //   console.log(id, obj);
+      axios
+        .patch(`https://masai-event-l3ru.onrender.com/users/${id}`, obj)
+        .then((res) => {
+          getData();
+          //   alert("data Updated");
+          pop.classList.toggle("active");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   </script>
 </html>
