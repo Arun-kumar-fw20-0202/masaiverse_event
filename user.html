@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="inputBx">
+      <div class="inputBx">
+        <span>Name</span>
+        <input class="name" type="text" />
+        <span>Age</span>
+        <input class="age" type="text" />
+        <span>Place</span>
+        <input class="place" type="text" />
+        <span>Batch Name</span>
+        <input class="batch_name" type="text" />
+        <span>Profession</span>
+        <input class="profession" type="text" />
+        <button class="submit">Submit</button>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let submit = document.querySelector(".submit");
+    submit.addEventListener("click", function () {
+      let name = document.querySelector(".name").value;
+      let age = document.querySelector(".age").value;
+      let batch_name = document.querySelector(".batch_name").value;
+      let profession = document.querySelector(".profession").value;
+      let place = document.querySelector(".place").value;
+      let obj = {
+        name,
+        age,
+        batch_name,
+        profession,
+        place,
+      };
+
+      axios
+        .post("http://localhost:8080/users", obj)
+        .then((res) => {
+          alert("registration successful");
+        })
+        .catch((err) => console.log(err));
+    });
+  </script>
+</html>

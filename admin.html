@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Please login first</h1>
+    <div class="inputBx">
+      <span>username</span>
+      <input class="user" type="text" value="eve.holt@reqres.in" />
+      <span>password</span>
+      <input class="pass" type="text" value="123" />
+      <button class="login">Login</button>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let login = document.querySelector(".login");
+
+    login.addEventListener("click", function () {
+      let username = document.querySelector(".user").value;
+      let password = document.querySelector(".pass").value;
+      let loginData = { email: username, password };
+      //   console.log(loginData);
+      axios
+        .post("https://reqres.in/api/login", loginData)
+        .then((res) => {
+          localStorage.setItem("masai_event", JSON.stringify(res.data));
+          localStorage.setItem("isAuth", JSON.stringify(true));
+          window.location.href = "data.html";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  </script>
+</html>

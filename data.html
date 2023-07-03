@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="card">
+        <p>name</p>
+        <p>Age</p>
+        <p>Place</p>
+        <p>batch_name</p>
+        <p>profession</p>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let isAuth = JSON.parse(localStorage.getItem("isAuth"));
+    console.log(isAuth);
+    if (!isAuth) {
+      window.location.href = "admin.html";
+    }
+    function showData(data) {
+      console.log(data);
+    }
+
+    function getData() {
+      axios
+        .get(" http://localhost:8080/users")
+        .then((res) => {
+          showData(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+    getData();
+  </script>
+</html>
